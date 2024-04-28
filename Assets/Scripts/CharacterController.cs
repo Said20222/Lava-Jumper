@@ -1,36 +1,4 @@
-// using UnityEngine;
-
-// public class CharacterController : MonoBehaviour
-// {
-//     [SerializeField] private float _moveSpeed;
-//     [SerializeField] private float _rotationSpeed;
-//     [SerializeField] private float _jumpForce;
-//     [SerializeField] private Rigidbody _rb;
-
-//     void Start()
-//     {
-//     }
-
-//     void Update()
-//     {
-//         // Movement
-//         float horizontalInput = Input.GetAxis("Horizontal");
-//         float verticalInput = Input.GetAxis("Vertical");
-
-//         Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput) * _moveSpeed * Time.deltaTime;
-//         _rb.MovePosition(transform.position + movement);
-
-//         // Rotation
-//         if (movement != Vector3.zero)
-//         {
-//             Quaternion newRotation = Quaternion.LookRotation(movement);
-//             _rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, newRotation, _rotationSpeed * Time.deltaTime));
-//         }
-//     }
-// }
-
 using UnityEngine;
-using System.Collections;
 
 public class CharacterController : MonoBehaviour {
 
@@ -67,8 +35,6 @@ public class CharacterController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-		//transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation (Quaternion.Euler(0,rotationOffset,0)*facingDir), speedRot*Time.deltaTime);
 
 
 
