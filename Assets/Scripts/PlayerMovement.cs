@@ -1,13 +1,10 @@
-using System.Globalization;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
 	private Vector3 _nextPos;
 	private Vector3 _startPos;
-	[SerializeField] private float _jumpForce;
 	[SerializeField] private float _speed;
-	[SerializeField] private float _speedRot;
 	private float _lerpTime;
 	private float _currentLerpTime;
 	private float _perc = 1;
@@ -29,22 +26,27 @@ public class PlayerMovement : MonoBehaviour {
 			}
 		}
 
+		// changing player's position
 		_startPos = gameObject.transform.position;
 
 		if (Input.GetButtonDown("Left") && gameObject.transform.position == _nextPos) {
 			_nextPos = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
+			gameObject.transform.rotation = Quaternion.Euler(0, -90, 0);
 		}
 
 		if (Input.GetButtonDown("Right") && gameObject.transform.position == _nextPos) {
 			_nextPos = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
+			gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
 		}
 
 		if (Input.GetButtonDown("Up") && gameObject.transform.position == _nextPos) {
 			_nextPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
+			gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		if (Input.GetButtonDown("Down") && gameObject.transform.position == _nextPos) {
 			_nextPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
+			gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
 		}
 
 		if (_isFirstInput == true) {
@@ -63,7 +65,4 @@ public class PlayerMovement : MonoBehaviour {
 		_animator.SetBool("Jump", _isJumping);
 	}
 
-	public bool IsJumping {
-		get {return _isJumping;}
-	}
 }
