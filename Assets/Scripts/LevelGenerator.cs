@@ -9,7 +9,7 @@ public class LevelGenerator : MonoBehaviour
     RaycastHit hit;
     private int _surfaceType = 1;
     private int _surfaceLength;
-    private int _playerDistance = 12;
+    private int _playerDistance = 5;
     private Vector3 initialPosition = new Vector3(0, 0, 0);
     private Queue<GameObject> _rockPool = new Queue<GameObject>();
     private Queue<GameObject> _lavaPool = new Queue<GameObject>();
@@ -23,7 +23,6 @@ public class LevelGenerator : MonoBehaviour
     void Update()
     {
         Vector3 targetPosition = 4 * Vector3.forward + Vector3.down;
-        Vector3 playerPosition = _camera.transform.position;
 
         if (Physics.Raycast(_camera.transform.position, targetPosition, out hit)) {
             Debug.DrawRay(_camera.transform.position, targetPosition);
@@ -36,7 +35,7 @@ public class LevelGenerator : MonoBehaviour
                 _surfaceLength = 5;
                 for (int i = 0; i < _surfaceLength; i++) {
                     initialPosition = new Vector3(0, -0.5f, _playerDistance);
-                    _playerDistance += 1;
+                    _playerDistance++;
                     //GameObject rockInstance = Instantiate(_rockPrefab) as GameObject;
                     GameObject rockInstance = GetPooledObject(_rockPrefab, _rockPool);
                     rockInstance.transform.position = initialPosition;
@@ -45,10 +44,10 @@ public class LevelGenerator : MonoBehaviour
                 }
             } else if (_surfaceType == 1) {
                 //_surfaceLength = Random.Range(10, 15);
-                _surfaceLength = 15;
+                _surfaceLength = 12;
                 for (int i = 0; i < _surfaceLength; i++) {
                     initialPosition = new Vector3(0, -0.5f, _playerDistance);
-                    _playerDistance += 1;
+                    _playerDistance++;
                     //GameObject lavaInstance = Instantiate(_lavaPrefab) as GameObject;
                     GameObject lavaInstance = GetPooledObject(_lavaPrefab, _lavaPool);
                     lavaInstance.transform.position = initialPosition;
@@ -58,13 +57,13 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        ReturnObjectsIfPassed();
+        ReturnObjectsIfPassed(_camera.transform.position);
     }
 
-    void ReturnObjectsIfPassed()
+    void ReturnObjectsIfPassed(Vector3 playerPosition)
     {
         // Get the position of the player character
-        Vector3 playerPosition = _camera.transform.position;
+        //Vector3 playerPosition = _camera.transform.position;
 
         // Iterate through active objects in the scene
         foreach (GameObject rockInstance in _rockPool)
@@ -87,7 +86,7 @@ public class LevelGenerator : MonoBehaviour
     private void InitializeObjectPool(GameObject prefab, Queue<GameObject> pool)
     {
         // pre-instantiate all prefabs in a pool
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 20; i++)
         {
             GameObject obj = Instantiate(prefab);
             obj.SetActive(false);
@@ -115,7 +114,7 @@ public class LevelGenerator : MonoBehaviour
     {
         // Deactivate the object in the pool
         obj.SetActive(false);
-        //pool.Enqueue(obj);
+        pool.Enqueue(obj);
     }
 }
 
