@@ -57,18 +57,15 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        ReturnObjectsIfPassed(_camera.transform.position);
+        ReturnObjectsIfPassed(_camera.transform.position, 10);
     }
 
-    void ReturnObjectsIfPassed(Vector3 playerPosition)
+    void ReturnObjectsIfPassed(Vector3 playerPosition, float distance)
     {
-        // Get the position of the player character
-        //Vector3 playerPosition = _camera.transform.position;
-
         // Iterate through active objects in the scene
         foreach (GameObject rockInstance in _rockPool)
         {
-            if (rockInstance.activeSelf && rockInstance.transform.position.z < playerPosition.z - 5)
+            if (rockInstance.activeSelf && rockInstance.transform.position.z < playerPosition.z - distance)
             {
                 ReturnToPool(rockInstance, _rockPool);
             }
@@ -76,7 +73,7 @@ public class LevelGenerator : MonoBehaviour
 
         foreach (GameObject lavaInstance in _lavaPool)
         {
-            if (lavaInstance.activeSelf && lavaInstance.transform.position.z < playerPosition.z - 5)
+            if (lavaInstance.activeSelf && lavaInstance.transform.position.z < playerPosition.z - distance)
             {
                 ReturnToPool(lavaInstance, _lavaPool);
             }
@@ -86,7 +83,7 @@ public class LevelGenerator : MonoBehaviour
     private void InitializeObjectPool(GameObject prefab, Queue<GameObject> pool)
     {
         // pre-instantiate all prefabs in a pool
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 50; i++)
         {
             GameObject obj = Instantiate(prefab);
             obj.SetActive(false);
@@ -99,22 +96,23 @@ public class LevelGenerator : MonoBehaviour
         // Retrieve an object from the pool, or instantiate a new one if pool is empty
         if (pool.Count > 0)
         {
-            GameObject obj = pool.Peek();
+            GameObject obj = pool.Dequeue();
+            pool.Enqueue(obj);
             return obj;
         }
         else
         {
             GameObject obj = Instantiate(prefab); 
-            pool.Enqueue(obj);
+            obj.SetActive(false);
             return obj;
         }
     }
 
     private void ReturnToPool(GameObject obj, Queue<GameObject> pool)
     {
-        // Deactivate the object in the pool
+        // Deactivate the object and add it to the pool
         obj.SetActive(false);
-        pool.Enqueue(obj);
+        //pool.Enqueue(obj);
     }
 }
 
