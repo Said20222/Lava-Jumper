@@ -14,10 +14,16 @@ public class PlatformPooler : MonoBehaviour
         public int size;
     }
 
+    #region Singleton
+    public static PlatformPooler Instance;
+
+    private void Awake() {
+        Instance = this;
+    }
+    #endregion
+
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
-    
-    // Start is called before the first frame update
     void Start()
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
@@ -35,8 +41,21 @@ public class PlatformPooler : MonoBehaviour
         }
     }
 
-    public void SpawnFromPool(string tag, Vector3 position, Quaternion rotation) {
+    public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation) {
+        if (!poolDictionary.ContainsKey(tag)) {
+            Debug.LogWarning("Pool with tag " + tag + " does not exist.");
+            return null;
+        }
 
+        GameObject spawnedObject = poolDictionary[tag].Dequeue();
+
+        spawnedObject.SetActive(true);
+        spawnedObject.transform.position = position;
+        spawnedObject.transform.rotation = rotation;
+
+        poolDictionary[tag].Enqueue(spawnedObject);
+
+        return spawnedObject;
     }
 
     // Update is called once per frame

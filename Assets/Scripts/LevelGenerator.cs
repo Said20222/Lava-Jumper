@@ -6,19 +6,22 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private GameObject _lavaPrefab;
     [SerializeField] private GameObject _rockPrefab;
     [SerializeField] private Camera _camera;
+    [SerializeField] private float _lavaSectionLength;
+    [SerializeField] private float _rockSectionLength;
     RaycastHit hit;
     private int _surfaceType = 1;
-    private int _surfaceLength;
     private int _playerDistance = 5;
     private Vector3 initialPosition = new Vector3(0, 0, 0);
     private Queue<GameObject> _rockPool = new Queue<GameObject>();
     private Queue<GameObject> _lavaPool = new Queue<GameObject>();
+    private PlatformPooler _platformPool;
 
     void Start()
     {
         // Initialize object pools
         InitializeObjectPool(_rockPrefab, _rockPool);
         InitializeObjectPool(_lavaPrefab, _lavaPool);
+        _platformPool = PlatformPooler.Instance;
     }
     void Update()
     {
@@ -31,24 +34,18 @@ public class LevelGenerator : MonoBehaviour
             Debug.DrawRay(_camera.transform.position, targetPosition);
             Debug.Log("Did not hit");
             if (_surfaceType == 0) {
-                //_surfaceLength = Random.Range(3, 5);
-                _surfaceLength = 5;
-                for (int i = 0; i < _surfaceLength; i++) {
+                for (int i = 0; i < _rockSectionLength; i++) {
                     initialPosition = new Vector3(0, -0.5f, _playerDistance);
                     _playerDistance++;
-                    //GameObject rockInstance = Instantiate(_rockPrefab) as GameObject;
                     GameObject rockInstance = GetPooledObject(_rockPrefab, _rockPool);
                     rockInstance.transform.position = initialPosition;
                     rockInstance.SetActive(true);
                     _surfaceType = 1;
                 }
             } else if (_surfaceType == 1) {
-                //_surfaceLength = Random.Range(10, 15);
-                _surfaceLength = 12;
-                for (int i = 0; i < _surfaceLength; i++) {
+                for (int i = 0; i < _lavaSectionLength; i++) {
                     initialPosition = new Vector3(0, -0.5f, _playerDistance);
                     _playerDistance++;
-                    //GameObject lavaInstance = Instantiate(_lavaPrefab) as GameObject;
                     GameObject lavaInstance = GetPooledObject(_lavaPrefab, _lavaPool);
                     lavaInstance.transform.position = initialPosition;
                     lavaInstance.SetActive(true);
@@ -56,6 +53,8 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
+
+        _platformPool.SpawnFromPool("Platform", initialPosition, Quaternion.identity);
 
         ReturnObjectsIfPassed(_camera.transform.position, 10);
     }
@@ -67,7 +66,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if (rockInstance.activeSelf && rockInstance.transform.position.z < playerPosition.z - distance)
             {
-                ReturnToPool(rockInstance, _rockPool);
+                ReturnToPool(rockInstance);
             }
         }
 
@@ -75,7 +74,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if (lavaInstance.activeSelf && lavaInstance.transform.position.z < playerPosition.z - distance)
             {
-                ReturnToPool(lavaInstance, _lavaPool);
+                ReturnToPool(lavaInstance);
             }
         }
     }
@@ -108,11 +107,10 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private void ReturnToPool(GameObject obj, Queue<GameObject> pool)
+    private void ReturnToPool(GameObject obj)
     {
         // Deactivate the object and add it to the pool
         obj.SetActive(false);
-        //pool.Enqueue(obj);
     }
 }
 
