@@ -15,8 +15,11 @@ public class PlayerMovement : MonoBehaviour {
 	private bool _isFirstInput;
 	private bool _isJumping;
 
-	//[SerializeField] private Rigidbody _rb;
+	[SerializeField] private Rigidbody _rb;
 	[SerializeField] private Animator _animator;
+
+	public float BoundXMax { get { return _boundXMax;}}
+	public float BoundXMin { get { return _boundXMin;}}
 
 	// Update is called once per frame
 	void Update () {
@@ -30,6 +33,7 @@ public class PlayerMovement : MonoBehaviour {
 				_currentLerpTime = 0;
 				_isFirstInput = true;
 				_isJumping = true;
+				//_rb.AddForce(0, 200, 0);
 			}
 		}
 

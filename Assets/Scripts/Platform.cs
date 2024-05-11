@@ -5,7 +5,9 @@ using UnityEngine;
 public class Platform : MonoBehaviour 
 {
 
-    void OnEnable () {
-        
+    void OnCollisionEnter (Collision collision) {
+        //if (collision.gameObject.GetComponent<PlayerMovement>()) {
+            Debug.Log("Stepped on a platform");
+        //}
     }
 }

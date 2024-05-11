@@ -57,10 +57,4 @@ public class PlatformPooler : MonoBehaviour
 
         return spawnedObject;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
