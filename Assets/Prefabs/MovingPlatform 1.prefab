@@ -12,6 +12,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6063873260260990477, guid: b0804dc1a46b84fb79caaeaa13f90558, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6063873260260990477, guid: b0804dc1a46b84fb79caaeaa13f90558, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.967188
       objectReference: {fileID: 0}
@@ -53,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6063873260260990961, guid: b0804dc1a46b84fb79caaeaa13f90558, type: 3}
       propertyPath: m_Name
-      value: MovingPlatform
+      value: MovingPlatform 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6663408591201031666, guid: b0804dc1a46b84fb79caaeaa13f90558, type: 3}
@@ -75,5 +79,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 068caac9039c24626ab27bfe11a4b383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
-  _player: {fileID: 0}
+  _speed: 1

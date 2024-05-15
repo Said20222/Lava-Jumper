@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class MovingPlatform : Platform
     [SerializeField] private float _speed;
     private float _maxVal = 4;
     private float _minVal = -4;
+    private int direction;
     private Vector3 _targetPosition;
 
     public float Speed {
@@ -17,20 +19,29 @@ public class MovingPlatform : Platform
     }
 
     void Start() {
-        //_maxVal = 4;
-        //_minVal = -4;
+        direction = 1;
     }
 
     void Update() {
-        if (_speed > 0) {
-            float pingPongValue = Mathf.PingPong(Time.time, _maxVal - _minVal);
-            float adjustedXCoordinate = pingPongValue + _minVal;
-            _targetPosition = new Vector3(adjustedXCoordinate, gameObject.transform.position.y, gameObject.transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, _targetPosition, _speed * Time.deltaTime);
+
+        if (direction > 0) {
+            _targetPosition = new Vector3(_maxVal, transform.position.y, transform.position.z);
+        } else {
+            _targetPosition = new Vector3(_minVal, transform.position.y, transform.position.z);
         }
+
+        // Calculate the movement direction
+        Vector3 movementDirection = (_targetPosition - transform.position).normalized;
+
+        // Move the platform at a constant speed
+        gameObject.transform.position += movementDirection * _speed * Time.deltaTime;
+
+        float distance = (_targetPosition - transform.position).magnitude;
+
+        if (distance <= 0.1) {
+            direction *= -1;
+        }
+
     }
 
-    void OnCollisionEnter() {
-
-    }
 }

@@ -6,21 +6,26 @@ public class BreakablePlatform : MonoBehaviour
 {
     [SerializeField] private GameObject _regularPrefab;
     [SerializeField] private GameObject _brokenPrefab;
+    [SerializeField] private float _breakingTime;
 
     void OnCollisionEnter() {
         if (_regularPrefab.activeSelf) {
+            Debug.Log("Breaking started");
             _regularPrefab.SetActive(false);
             _brokenPrefab.SetActive(true);
-        } else {
-            _regularPrefab.SetActive(false);
-        }
+            StartCoroutine(BreakingCoroutine());
+        } 
     }
 
     void OnEnable() {
-
+         _regularPrefab.SetActive(true);
+        _brokenPrefab.SetActive(false);
     }
 
-    void OnDisable() {
-        
+    IEnumerator BreakingCoroutine() {
+        yield return new WaitForSeconds(_breakingTime);
+        gameObject.SetActive(false);
+        Debug.Log("Breaking finished");
+        yield return null;
     }
 }

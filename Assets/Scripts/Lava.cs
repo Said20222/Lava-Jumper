@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Lava : MonoBehaviour
 {
-    void OnCollisionEnter (Collision collision) {
-        if (collision.gameObject.GetComponent<PlayerMovement>()) {
+    void OnTriggerEnter (Collider collision) {
+        //if (collision.gameObject.GetComponent<PlayerMovement>()) {
             Debug.Log("Stepped in lava");
             collision.gameObject.SetActive(false);
-        }
+        //}
     }
 }

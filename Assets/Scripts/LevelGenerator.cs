@@ -46,6 +46,7 @@ public class LevelGenerator : MonoBehaviour
                     _surfaceType = 1;
                 }
             } else if (_surfaceType == 1) {
+                bool isPlatformMoving = false;
                 for (int i = 0; i < _lavaSectionLength; i++) {
                     initialPosition = new Vector3(0, -0.5f, _playerDistance);
                     _platformPosition = new Vector3(Random.Range(-4, 4), 0.1f, _playerDistance);
@@ -56,7 +57,13 @@ public class LevelGenerator : MonoBehaviour
                     _surfaceType = 0;
 
                     /// TODO: Spawn different platforms
-                    _platformPool.SpawnFromPool("Platform", _platformPosition, Quaternion.identity);
+                    if (isPlatformMoving) {
+                        _platformPool.SpawnFromPool("MovingPlatform", _platformPosition, Quaternion.identity);
+                        isPlatformMoving = false;
+                    } else {
+                        _platformPool.SpawnFromPool("BreakablePlatform", _platformPosition, Quaternion.identity);
+                        isPlatformMoving = true;
+                    }
                 }
             }
         }

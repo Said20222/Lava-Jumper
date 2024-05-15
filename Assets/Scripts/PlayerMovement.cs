@@ -15,13 +15,18 @@ public class PlayerMovement : MonoBehaviour {
 	private bool _isFirstInput;
 	private bool _isJumping;
 
-	[SerializeField] private Rigidbody _rb;
-	[SerializeField] private Animator _animator;
+	[SerializeField] private GameObject _playerModel;
+	private Rigidbody _rb;
+	private Animator _animator;
 
 	public float BoundXMax { get { return _boundXMax;}}
 	public float BoundXMin { get { return _boundXMin;}}
 
 	// Update is called once per frame
+	void Start() {
+		_rb = _playerModel.GetComponent<Rigidbody>();
+		_animator = _playerModel.GetComponent<Animator>();
+	}
 	void Update () {
 
 		// get the minimum boundary on z-axis
@@ -33,7 +38,7 @@ public class PlayerMovement : MonoBehaviour {
 				_currentLerpTime = 0;
 				_isFirstInput = true;
 				_isJumping = true;
-				//_rb.AddForce(0, 200, 0);
+				_rb.AddForce(0, 200, 0);
 			}
 		}
 
@@ -41,21 +46,25 @@ public class PlayerMovement : MonoBehaviour {
 		_startPos = gameObject.transform.position;
 
 		if (Input.GetButtonDown("Left") && gameObject.transform.position == _nextPos && gameObject.transform.position.x > _boundXMin) {
+			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
 			gameObject.transform.rotation = Quaternion.Euler(0, -90, 0);
 		}
 
 		if (Input.GetButtonDown("Right") && gameObject.transform.position == _nextPos && gameObject.transform.position.x < _boundXMax) {
+			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
 			gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
 		}
 
 		if (Input.GetButtonDown("Up") && gameObject.transform.position == _nextPos) {
+			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
 			gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
 		if (Input.GetButtonDown("Down") && gameObject.transform.position == _nextPos && gameObject.transform.position.z > _boundZMin) {
+			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
 			gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
 		}
