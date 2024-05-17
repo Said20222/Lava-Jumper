@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) {
 			_endTouchPosition = Input.GetTouch(0).position;
 
-			if (_endTouchPosition.x > _startTouchPosition.x) {
+			if (_endTouchPosition.x > _startTouchPosition.x ) {
 				_swipeRight = true;
 			}
 
