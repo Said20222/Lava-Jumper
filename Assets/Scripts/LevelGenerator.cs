@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -56,7 +55,6 @@ public class LevelGenerator : MonoBehaviour
                     lavaInstance.SetActive(true);
                     _surfaceType = 0;
 
-                    /// TODO: Spawn different platforms
                     if (isPlatformMoving) {
                         _platformPool.SpawnFromPool("MovingPlatform", _platformPosition, Quaternion.identity);
                         isPlatformMoving = false;
@@ -90,10 +88,10 @@ public class LevelGenerator : MonoBehaviour
                 ReturnToPool(lavaInstance);
             }
         }
-/// TODO: Returning platforms to their respective pools
+
+        //Returning platforms to their respective pools
         foreach (PlatformPooler.Pool pool in _platformPool.pools) {
             foreach (var poolEntry in _platformPool.poolDictionary) {
-                //string platformName = poolEntry.Key;
                 foreach (GameObject obj in poolEntry.Value) {
                     if (obj.activeSelf && obj.transform.position.z  < playerPosition.z - distance) {
                         obj.SetActive(false);
@@ -133,7 +131,7 @@ public class LevelGenerator : MonoBehaviour
 
     private void ReturnToPool(GameObject obj)
     {
-        // Deactivate the object and add it to the pool
+        // Deactivate the object 
         obj.SetActive(false);
     }
 }

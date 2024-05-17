@@ -7,7 +7,6 @@ public class BorderMovement : MonoBehaviour
     [SerializeField] private float distanceToPlayer;
     [SerializeField] private GameObject _player;
 
-    // Update is called once per frame
     void Update()
     {
         if (transform.position.z < _player.transform.position.z - distanceToPlayer) {

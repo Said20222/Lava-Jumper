@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
@@ -14,10 +15,18 @@ public class PlayerMovement : MonoBehaviour {
 
 	private bool _isFirstInput;
 	private bool _isJumping;
+	private bool _swipeRight;
+	private bool _swipeLeft;
+	private bool _swipeUp;
+	private bool _swipeDown;
+
+	private Vector2 _startTouchPosition;
+	private Vector2 _endTouchPosition;
 
 	[SerializeField] private GameObject _playerModel;
 	private Rigidbody _rb;
 	private Animator _animator;
+	public event Action OnDeath;
 
 	public float BoundXMax { get { return _boundXMax;}}
 	public float BoundXMin { get { return _boundXMin;}}
@@ -45,7 +54,8 @@ public class PlayerMovement : MonoBehaviour {
 		// changing player's position
 		_startPos = gameObject.transform.position;
 
-		if (Input.GetButtonDown("Left") && gameObject.transform.position == _nextPos && gameObject.transform.position.x > _boundXMin) {
+		if (Input.GetButtonDown("Left") 
+		&& gameObject.transform.position == _nextPos && gameObject.transform.position.x > _boundXMin) {
 			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
 			gameObject.transform.rotation = Quaternion.Euler(0, -90, 0);
@@ -82,7 +92,14 @@ public class PlayerMovement : MonoBehaviour {
 			}
 		}
 
+		if (_playerModel.transform.position.y < -3) {
+			OnDeath?.Invoke();
+			gameObject.SetActive(false);
+		}
+
 		_animator.SetBool("Jump", _isJumping);
 	}
+
+
 
 }
