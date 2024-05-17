@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	public float BoundXMax { get { return _boundXMax;}}
 	public float BoundXMin { get { return _boundXMin;}}
+	private float _boundZMin;
 
 	// Update is called once per frame
 	void Start() {
@@ -38,10 +39,44 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	void Update () {
 
-		// get the minimum boundary on z-axis
-		float _boundZMin = _borderZMin.transform.position.z;
+		// handling swipe controls
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
+			_startTouchPosition = Input.GetTouch(0).position;
+		}
 
-		if (Input.GetButtonDown("Left") || Input.GetButtonDown("Right") || Input.GetButtonDown("Up") || Input.GetButtonDown("Down")) {
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) {
+			_endTouchPosition = Input.GetTouch(0).position;
+
+			if (_endTouchPosition.x > _startTouchPosition.x) {
+				_swipeRight = true;
+			}
+
+			if (_endTouchPosition.x < _startTouchPosition.x) {
+				_swipeLeft = true;
+			}
+
+			if (_endTouchPosition.y < _startTouchPosition.y) {
+				_swipeDown = true;
+			}
+
+			if (_endTouchPosition.y > _startTouchPosition.y) {
+				_swipeUp = true;
+			}
+			
+		}
+
+		if (Input.touchCount == 0) {
+			_swipeDown = false;
+			_swipeUp = false;
+			_swipeRight = false;
+			_swipeLeft = false;
+		}
+
+
+		// get the minimum boundary on z-axis
+		_boundZMin = _borderZMin.transform.position.z;
+
+		if (_swipeLeft || _swipeRight || _swipeDown || _swipeUp) {
 			if (_perc == 1) {
 				_lerpTime = 1;
 				_currentLerpTime = 0;
@@ -54,26 +89,25 @@ public class PlayerMovement : MonoBehaviour {
 		// changing player's position
 		_startPos = gameObject.transform.position;
 
-		if (Input.GetButtonDown("Left") 
-		&& gameObject.transform.position == _nextPos && gameObject.transform.position.x > _boundXMin) {
+		if (_swipeLeft && gameObject.transform.position == _nextPos && gameObject.transform.position.x > _boundXMin) {
 			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
 			gameObject.transform.rotation = Quaternion.Euler(0, -90, 0);
 		}
 
-		if (Input.GetButtonDown("Right") && gameObject.transform.position == _nextPos && gameObject.transform.position.x < _boundXMax) {
+		if (_swipeRight && gameObject.transform.position == _nextPos && gameObject.transform.position.x < _boundXMax) {
 			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z);
 			gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
 		}
 
-		if (Input.GetButtonDown("Up") && gameObject.transform.position == _nextPos) {
+		if (_swipeUp && gameObject.transform.position == _nextPos) {
 			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
 			gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 
-		if (Input.GetButtonDown("Down") && gameObject.transform.position == _nextPos && gameObject.transform.position.z > _boundZMin) {
+		if (_swipeDown && gameObject.transform.position == _nextPos && gameObject.transform.position.z > _boundZMin) {
 			_rb.AddForce(0, 20, 0);
 			_nextPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
 			gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
