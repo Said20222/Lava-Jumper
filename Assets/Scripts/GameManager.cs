@@ -23,10 +23,6 @@ public class GameManager : MonoBehaviour
         _playerMovement.OnDeath -= EndGame;
     }
 
-    public void PauseGame() {
-        _isPaused = true;
-    }
-
     public void EndGame() {
         _isPaused = true;
         _finalScore.text = "Final score: " + _scoreManager.CurrentScore.ToString();

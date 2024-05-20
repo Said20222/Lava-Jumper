@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _regularPrefab: {fileID: 2324722515526191860}
   _brokenPrefab: {fileID: 5732075594840640267}
-  _breakingTime: 5
+  _breakingTime: 200
 --- !u!65 &1001424276814563511
 BoxCollider:
   m_ObjectHideFlags: 0
